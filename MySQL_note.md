@@ -20,3 +20,10 @@ show databases; //注意复数！
 use OneDatabaseYouWant
 select * from admin
 ```
+
+##### 4.退出数据库服务器
+```
+exit
+```
+
+##### 5.创建数据库
