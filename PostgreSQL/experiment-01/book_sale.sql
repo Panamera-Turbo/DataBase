@@ -69,7 +69,7 @@ insert into BookSaleInfo
 values ('ISBN2387492793247332', '202009142203490001','2020-09-14', 8);
 
 insert into BookSaleInfo
-values ('ISBN7992748279234742', '202009142203490002', '2020-09-14', 1);
+values ('ISBN7992748279234742', '202009142203490002', '2020-09-14', 10);
 
 insert into BookInfo
 values ('数据库系统设计与原理-错误版本待删除', '李政康', 59, 40, '人们邮电出版社', 1, 'ISBN7992748279234749');
@@ -95,8 +95,12 @@ select BookName, BookPrice
 -- 改
 
 update BookSaleInfo
-   set SaleCount = 109
- where BookID = 'ISBN7992748279234742';
+   set SaleCount = 10
+ where BookID = 'ISBN2387492793247332';
+
+update BookInfo
+   set BookLeft = 89
+ where BookID = 'ISBN2387492793247332';
 
 --------------------------------------------
 ----------     存储过程     ----------------
@@ -118,31 +122,6 @@ $$ language plpgsql;
 -- 调用
 select Pro_CurrentSale('2020-09-14');   
 
-
-
-
--- create or replace function Pro_CurrentSale(refcursor) 
--- returns refcursor as $$
--- declare
---   u record;
---   cur cursor select SaleTime, SaleCount, BookPrice
---     from BookSaleInfo
---     where SaleTime = date;
---   SaleSum integer := 0;
---   PriceSum money := 0;
--- begin
---   for u in cur loop
---     SaleSum = SaleSum + u.BookPrice;
---   end loop
-
---   return $1;
--- end;
--- $$ language plpgsql;
-
-
-
-
-
 ------------------------------------------------
 -------------   触发器    ------------
 -------------------------------------------------
@@ -150,8 +129,8 @@ create or replace function insert_sale()
   returns trigger as $insert_sale$
   begin
     update BookInfo
-       set BookLeft := BookLeft - NEW.SaleCount
-     where BookID := NEW.BookID;
+       set BookLeft = BookLeft - NEW.SaleCount
+     where BookID = NEW.BookID;
     return NEW;
   end;
 $insert_sale$ language plpgsql;
@@ -167,4 +146,44 @@ values ('ISBN7992748279234742', '202009142203490003', '2020-09-14', 1);
 select * from BookInfo;
 
 --------------------------------------------
------------     
+--------------------------------------------
+-----------    实验二内容    ----------------
+--------------------------------------------
+--------------------------------------------
+
+------------------------------------------------------
+---- 创建客户（R_Customer）、商家（R_Seller）角色  -----
+------------------------------------------------------
+
+
+
+------------------------------------------------------
+--为R_Customer、R_Seller角色赋予数据库对象权限
+------------------------------------------------------
+
+
+
+
+------------------------------------------------------
+-- 创建客户用户U_Customer、商家用户U_Seller
+------------------------------------------------------
+
+
+
+
+------------------------------------------------------
+--为客户用户U_Customer、商家用户U_Seller分派客户（R_Client）、商家（R_Seller）角色
+------------------------------------------------------
+
+
+
+
+
+------------------------------------------------------
+--以客户用户U_Customer、商家用户U_Seller身份访问图书销售管理数据库
+------------------------------------------------------
+
+
+
+
+
